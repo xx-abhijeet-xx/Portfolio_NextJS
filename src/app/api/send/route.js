@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+if (!resendApiKey) {
+  throw new Error("RESEND_API_KEY is not defined in environment variables.");
+}
+
+const resend = new Resend(resendApiKey);
 const fromEmail = process.env.FROM_EMAIL;
 
 export async function POST(req, res) {
@@ -9,8 +14,8 @@ export async function POST(req, res) {
   console.log(email, subject, message);
   try {
     const data = await resend.emails.send({
-      from: fromEmail,
-      to: [fromEmail, email],
+      from: `Abhi <${fromEmail}>`,
+      to: ["vabhijeet23@gmail.com"],
       subject: subject,
       react: (
         <>
