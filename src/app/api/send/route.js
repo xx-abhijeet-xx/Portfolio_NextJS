@@ -12,6 +12,9 @@ const resend = new Resend(resendApiKey);
 
 // Retrieve the FROM_EMAIL environment variable
 const fromEmail = process.env.FROM_EMAIL;
+if (!fromEmail) {
+  throw new Error("FROM_EMAIL is not defined in environment variables.");
+}
 
 export async function POST(req, res) {
   const { email, subject, message } = await req.json();
@@ -19,8 +22,8 @@ export async function POST(req, res) {
   try {
     // Send email using Resend
     const data = await resend.emails.send({
-      from: `Abhi <${fromEmail}>`,
-      to: ["vabhijeet23@gmail.com"],
+      from: fromEmail,
+      to: [fromEmail, email],
       subject: subject,
       react: (
         <>
